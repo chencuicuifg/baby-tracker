@@ -1,6 +1,6 @@
 {
-  "name": "宝宝喂养与尿布记录",
-  "short_name": "宝宝记录",
+  "name": "Baby Feeding and Diaper Tracker",
+  "short_name": "Baby Tracker",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#fff8f1",

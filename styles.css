@@ -88,3 +88,11 @@ dialog::backdrop { background:rgba(37,34,31,.4); backdrop-filter: blur(3px); }
   .section-heading { align-items:flex-start; gap:8px; }
   .history-actions { flex-direction:column; align-items:flex-end; gap:0; }
 }
+
+.footer-actions { gap:12px; flex-wrap:wrap; }
+.file-actions { display:flex; gap:10px; flex-wrap:wrap; }
+@media (max-width:540px) {
+  .footer-actions { align-items:flex-start; }
+  .file-actions { width:100%; }
+  .file-actions .secondary-btn { flex:1; }
+}
