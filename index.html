@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#fff8f1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="宝宝记录" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon-180.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>宝宝记录</title>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">今天</p>
+        <h1 id="todayTitle">宝宝记录</h1>
+      </div>
+      <button id="settingsBtn" class="icon-btn" aria-label="设置">⚙️</button>
+    </header>
+
+    <section class="status-card">
+      <div>
+        <span class="status-label">距离上次喂奶</span>
+        <strong id="sinceFeed">暂无记录</strong>
+      </div>
+      <div class="timer-box">
+        <span>历史记录可点击编辑</span>
+        <strong>本地保存</strong>
+      </div>
+    </section>
+
+    <section class="quick-grid" aria-label="快速记录">
+      <button class="quick-btn pee" data-action="pee">
+        <span class="emoji">💧</span><span>尿尿</span>
+        <small>一键记录</small>
+      </button>
+      <button class="quick-btn poop" data-action="poop">
+        <span class="emoji">💩</span><span>便便</span>
+        <small>一键记录</small>
+      </button>
+      <button class="quick-btn breast" data-action="breast-left">
+        <span class="emoji">🤱</span><span>左侧母乳</span>
+        <small>填写喂奶时长</small>
+      </button>
+      <button class="quick-btn breast" data-action="breast-right">
+        <span class="emoji">🤱</span><span>右侧母乳</span>
+        <small>填写喂奶时长</small>
+      </button>
+      <button class="quick-btn formula wide" data-action="formula">
+        <span class="emoji">🍼</span><span>Formula</span>
+        <small>选择奶量</small>
+      </button>
+    </section>
+
+    <section class="summary">
+      <div><strong id="peeCount">0</strong><span>尿尿</span></div>
+      <div><strong id="poopCount">0</strong><span>便便</span></div>
+      <div><strong id="formulaTotal">0 ml</strong><span>Formula</span></div>
+      <div><strong id="breastTotal">0 分钟</strong><span>母乳</span></div>
+    </section>
+
+    <section class="history">
+      <div class="section-heading">
+        <h2>最近记录 <small class="edit-hint">点击一条即可编辑</small></h2>
+        <div class="history-actions">
+          <button id="addHistoryBtn" class="text-btn add-btn">＋补录历史</button>
+          <button id="undoBtn" class="text-btn" disabled>撤销上一条</button>
+        </div>
+      </div>
+      <div id="emptyState" class="empty">还没有记录。点上面的按钮就可以开始。</div>
+      <ul id="historyList"></ul>
+    </section>
+
+    <footer>
+      <button id="exportBtn" class="secondary-btn">导出 CSV</button>
+      <button id="clearBtn" class="danger-link">清空全部数据</button>
+    </footer>
+  </main>
+
+  <dialog id="formulaDialog">
+    <form method="dialog" class="dialog-card">
+      <h3>这次喝了多少 Formula？</h3>
+      <div class="amount-grid" id="amountGrid"></div>
+      <label class="custom-amount">其他奶量
+        <div><input id="customAmount" inputmode="decimal" type="number" min="1" max="500" placeholder="例如 25" /><span>ml</span></div>
+      </label>
+      <div class="dialog-actions">
+        <button value="cancel" class="secondary-btn">取消</button>
+        <button id="saveCustomAmount" value="default" class="primary-btn">保存</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <dialog id="breastDialog">
+    <form method="dialog" class="dialog-card">
+      <h3 id="breastDialogTitle">记录母乳</h3>
+      <label>喂了多久？
+        <div class="duration-row"><input id="breastDuration" inputmode="numeric" type="number" min="1" max="180" placeholder="例如 15" /><span>分钟</span></div>
+      </label>
+      <div class="amount-grid" id="durationGrid"></div>
+      <div class="dialog-actions"><button value="cancel" class="secondary-btn">取消</button><button id="saveBreast" value="default" class="primary-btn">保存</button></div>
+    </form>
+  </dialog>
+
+
+  <dialog id="historyDialog">
+    <form method="dialog" class="dialog-card">
+      <h3>补录历史记录</h3>
+
+      <label>记录类型
+        <select id="historyType">
+          <option value="pee">💧 尿尿</option>
+          <option value="poop">💩 便便</option>
+          <option value="breast">🤱 母乳</option>
+          <option value="formula">🍼 Formula</option>
+        </select>
+      </label>
+
+      <div id="historyDynamicFields"></div>
+
+      <label>发生时间
+        <input id="historyTime" type="datetime-local" />
+      </label>
+
+      <div class="dialog-actions">
+        <button value="cancel" class="secondary-btn">取消</button>
+        <button id="saveHistoryBtn" value="default" class="primary-btn">添加记录</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="editDialog">
+    <form method="dialog" class="dialog-card">
+      <h3>编辑记录</h3>
+      <div id="editFields"></div>
+      <div class="dialog-actions spread"><button id="deleteEntryBtn" value="default" class="danger-btn">删除这条</button><div><button value="cancel" class="secondary-btn">取消</button><button id="saveEditBtn" value="default" class="primary-btn">保存修改</button></div></div>
+    </form>
+  </dialog>
+
+  <dialog id="settingsDialog">
+    <form method="dialog" class="dialog-card">
+      <h3>设置</h3>
+      <label>宝宝名字
+        <input id="babyNameInput" maxlength="20" placeholder="宝宝" />
+      </label>
+      <label>Formula 快捷奶量（用逗号分开）
+        <input id="amountsInput" placeholder="10,20,30,40,60" />
+      </label>
+      <p class="privacy-note">数据只保存在当前设备的浏览器里，不会上传到服务器。</p>
+      <div class="dialog-actions">
+        <button value="cancel" class="secondary-btn">取消</button>
+        <button id="saveSettings" value="default" class="primary-btn">保存</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
