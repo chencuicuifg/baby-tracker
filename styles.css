@@ -96,3 +96,17 @@ dialog::backdrop { background:rgba(37,34,31,.4); backdrop-filter: blur(3px); }
   .file-actions { width:100%; }
   .file-actions .secondary-btn { flex:1; }
 }
+
+.daily-stats{margin:18px 0}.daily-stats-list{display:grid;gap:10px}.daily-card{background:rgba(255,255,255,.82);border-radius:18px;padding:14px 16px}.daily-date{font-weight:800;margin-bottom:10px}.daily-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.daily-grid div{text-align:center}.daily-grid strong{display:block;font-size:16px}.daily-grid span{display:block;color:#85786e;font-size:11px;margin-top:3px}@media(max-width:540px){.daily-grid{grid-template-columns:repeat(3,1fr);row-gap:12px}}
+
+.pump { background:#efe7ff; }
+.summary { grid-template-columns:repeat(5,1fr); }
+@media (max-width:540px) {
+  .summary { grid-template-columns:1fr 1fr; }
+  .summary div:nth-child(2) { border-right:0; }
+  .summary div:nth-child(-n+4) { border-bottom:1px solid #eee2d7; }
+  .summary div:nth-child(4) { border-right:0; }
+  .summary div:last-child { grid-column:1 / -1; border-right:0; }
+}
+
+.summary{grid-template-columns:repeat(5,1fr);}

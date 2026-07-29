@@ -1,17 +1,6 @@
-# Baby Tracker V4
+# Baby Tracker V7 Fixed
 
-## Changes
-- Entire interface is now in English.
-- Added CSV import.
-- Imports both old Chinese CSV exports and new English CSV exports.
-- Duplicate records are skipped automatically.
-- Existing records on the device are preserved; imports are merged.
-- Records can still be edited or deleted after import.
-
-## CSV columns
-New exports use:
-- Time
-- Type
-- Side
-- Duration Minutes
-- Amount ml
+- Fixed Breast Feed input and save.
+- Pump Milk now uses the same stable interaction pattern as Formula.
+- Quick-choice buttons fill the input; Save records the selected or custom value.
+- Retains rolling 24-hour statistics, calendar-day statistics, CSV import/export, editing, and historical entry.

@@ -16,7 +16,7 @@
   <main class="app-shell">
     <header class="topbar">
       <div>
-        <p class="eyebrow">Today</p>
+        <p class="eyebrow">Past 24 Hours</p>
         <h1 id="todayTitle">Baby Tracker</h1>
       </div>
       <button id="settingsBtn" class="icon-btn" aria-label="Settings">⚙️</button>
@@ -24,43 +24,44 @@
 
     <section class="status-card">
       <div>
-        <span class="status-label">Time since last feeding</span>
+        <span class="status-label">Time since last feeding started</span>
         <strong id="sinceFeed">No feeding logged</strong>
       </div>
       <div class="timer-box">
-        <span>Tap any record to edit it</span>
-        <strong>Saved on this device</strong>
+        <span>Breastfeeding uses end time</span>
+        <strong>Start time is calculated</strong>
       </div>
     </section>
 
-    <section class="quick-grid" aria-label="Quick log">
+    <section class="quick-grid">
       <button class="quick-btn pee" data-action="pee">
-        <span class="emoji">💧</span><span>Wet Diaper</span>
-        <small>Log now</small>
+        <span class="emoji">💧</span><span>Wet Diaper</span><small>Log now</small>
       </button>
       <button class="quick-btn poop" data-action="poop">
-        <span class="emoji">💩</span><span>Dirty Diaper</span>
-        <small>Log now</small>
+        <span class="emoji">💩</span><span>Dirty Diaper</span><small>Log now</small>
       </button>
-      <button class="quick-btn breast" data-action="breast-left">
-        <span class="emoji">🤱</span><span>Left Breast</span>
-        <small>Enter feeding length</small>
-      </button>
-      <button class="quick-btn breast" data-action="breast-right">
-        <span class="emoji">🤱</span><span>Right Breast</span>
-        <small>Enter feeding length</small>
+      <button class="quick-btn breast wide" data-action="breast">
+        <span class="emoji">🤱</span><span>Breast Feed</span><small>Select duration</small>
       </button>
       <button class="quick-btn formula wide" data-action="formula">
-        <span class="emoji">🍼</span><span>Formula</span>
-        <small>Select amount</small>
+        <span class="emoji">🍼</span><span>Formula</span><small>Select amount</small>
+      </button>
+      <button class="quick-btn pump wide" data-action="pump">
+        <span class="emoji">🥛</span><span>Pump Milk</span><small>Select amount</small>
       </button>
     </section>
 
     <section class="summary">
-      <div><strong id="peeCount">0</strong><span>Wet</span></div>
-      <div><strong id="poopCount">0</strong><span>Dirty</span></div>
-      <div><strong id="formulaTotal">0 ml</strong><span>Formula</span></div>
-      <div><strong id="breastTotal">0 min</strong><span>Breastfeeding</span></div>
+      <div><strong id="peeCount">0</strong><span>Wet / 24h</span></div>
+      <div><strong id="poopCount">0</strong><span>Dirty / 24h</span></div>
+      <div><strong id="formulaTotal">0 ml</strong><span>Formula / 24h</span></div>
+      <div><strong id="breastTotal">0 min</strong><span>Breast / 24h</span></div>
+      <div><strong id="pumpTotal">0 ml</strong><span>Pumped / 24h</span></div>
+    </section>
+
+    <section class="daily-stats">
+      <div class="section-heading"><h2>Calendar Day Statistics</h2></div>
+      <div id="dailyStatsList" class="daily-stats-list"></div>
     </section>
 
     <section class="history">
@@ -71,7 +72,7 @@
           <button id="undoBtn" class="text-btn" disabled>Undo Last</button>
         </div>
       </div>
-      <div id="emptyState" class="empty">No records yet. Use the buttons above to start.</div>
+      <div id="emptyState" class="empty">No records yet.</div>
       <ul id="historyList"></ul>
     </section>
 
@@ -88,27 +89,51 @@
   <dialog id="formulaDialog">
     <form method="dialog" class="dialog-card">
       <h3>How much formula?</h3>
-      <div class="amount-grid" id="amountGrid"></div>
-      <label class="custom-amount">Other amount
-        <div><input id="customAmount" inputmode="decimal" type="number" min="1" max="500" placeholder="e.g. 25" /><span>ml</span></div>
+      <div class="amount-grid" id="formulaAmountGrid"></div>
+      <label>Other amount
+        <div class="duration-row">
+          <input id="formulaAmountInput" type="number" inputmode="decimal" min="1" max="500" placeholder="e.g. 30">
+          <span>ml</span>
+        </div>
       </label>
       <div class="dialog-actions">
         <button value="cancel" class="secondary-btn">Cancel</button>
-        <button id="saveCustomAmount" value="default" class="primary-btn">Save</button>
+        <button id="saveFormulaBtn" type="button" class="primary-btn">Save</button>
       </div>
     </form>
   </dialog>
 
   <dialog id="breastDialog">
     <form method="dialog" class="dialog-card">
-      <h3 id="breastDialogTitle">Log Breastfeeding</h3>
-      <label>How long?
-        <div class="duration-row"><input id="breastDuration" inputmode="numeric" type="number" min="1" max="180" placeholder="e.g. 15" /><span>min</span></div>
+      <h3>How long was the breast feed?</h3>
+      <div class="amount-grid" id="breastDurationGrid"></div>
+      <label>Other duration
+        <div class="duration-row">
+          <input id="breastDurationInput" type="number" inputmode="numeric" min="1" max="180" placeholder="e.g. 40">
+          <span>min</span>
+        </div>
       </label>
-      <div class="amount-grid" id="durationGrid"></div>
+      <p class="privacy-note">The current time is saved as the end time.</p>
       <div class="dialog-actions">
         <button value="cancel" class="secondary-btn">Cancel</button>
-        <button id="saveBreast" value="default" class="primary-btn">Save</button>
+        <button id="saveBreastBtn" type="button" class="primary-btn">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="pumpDialog">
+    <form method="dialog" class="dialog-card">
+      <h3>How much milk did you pump?</h3>
+      <div class="amount-grid" id="pumpAmountGrid"></div>
+      <label>Other amount
+        <div class="duration-row">
+          <input id="pumpAmountInput" type="number" inputmode="decimal" min="1" max="1000" placeholder="e.g. 60">
+          <span>ml</span>
+        </div>
+      </label>
+      <div class="dialog-actions">
+        <button value="cancel" class="secondary-btn">Cancel</button>
+        <button id="savePumpBtn" type="button" class="primary-btn">Save</button>
       </div>
     </form>
   </dialog>
@@ -120,17 +145,18 @@
         <select id="historyType">
           <option value="pee">💧 Wet Diaper</option>
           <option value="poop">💩 Dirty Diaper</option>
-          <option value="breast">🤱 Breastfeeding</option>
+          <option value="breast">🤱 Breast Feed</option>
           <option value="formula">🍼 Formula</option>
+          <option value="pump">🥛 Pump Milk</option>
         </select>
       </label>
       <div id="historyDynamicFields"></div>
-      <label>Date and time
-        <input id="historyTime" type="datetime-local" />
+      <label id="historyTimeLabel">Date and time
+        <input id="historyTime" type="datetime-local">
       </label>
       <div class="dialog-actions">
         <button value="cancel" class="secondary-btn">Cancel</button>
-        <button id="saveHistoryBtn" value="default" class="primary-btn">Add Record</button>
+        <button id="saveHistoryBtn" type="button" class="primary-btn">Add Record</button>
       </div>
     </form>
   </dialog>
@@ -140,10 +166,10 @@
       <h3>Edit Record</h3>
       <div id="editFields"></div>
       <div class="dialog-actions spread">
-        <button id="deleteEntryBtn" value="default" class="danger-btn">Delete</button>
+        <button id="deleteEntryBtn" type="button" class="danger-btn">Delete</button>
         <div>
           <button value="cancel" class="secondary-btn">Cancel</button>
-          <button id="saveEditBtn" value="default" class="primary-btn">Save Changes</button>
+          <button id="saveEditBtn" type="button" class="primary-btn">Save Changes</button>
         </div>
       </div>
     </form>
@@ -153,10 +179,10 @@
     <form method="dialog" class="dialog-card">
       <h3>Import CSV</h3>
       <p id="importSummary" class="privacy-note"></p>
-      <p class="privacy-note">Matching records already on this device will be skipped automatically.</p>
+      <p class="privacy-note">Duplicate records are skipped automatically.</p>
       <div class="dialog-actions">
         <button value="cancel" class="secondary-btn">Cancel</button>
-        <button id="confirmImportBtn" value="default" class="primary-btn">Import Records</button>
+        <button id="confirmImportBtn" type="button" class="primary-btn">Import Records</button>
       </div>
     </form>
   </dialog>
@@ -165,20 +191,19 @@
     <form method="dialog" class="dialog-card">
       <h3>Settings</h3>
       <label>Baby's name
-        <input id="babyNameInput" maxlength="20" placeholder="Baby" />
+        <input id="babyNameInput" maxlength="20" placeholder="Baby">
       </label>
-      <label>Formula quick amounts (comma-separated)
-        <input id="amountsInput" placeholder="10,20,30,40,60" />
+      <label>Formula quick amounts
+        <input id="amountsInput" placeholder="10,20,30,40,60">
       </label>
-      <p class="privacy-note">Your records are stored only in this browser on this device.</p>
       <div class="dialog-actions">
         <button value="cancel" class="secondary-btn">Cancel</button>
-        <button id="saveSettings" value="default" class="primary-btn">Save</button>
+        <button id="saveSettings" type="button" class="primary-btn">Save</button>
       </div>
     </form>
   </dialog>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="toast" class="toast"></div>
   <script src="app.js"></script>
 </body>
 </html>
