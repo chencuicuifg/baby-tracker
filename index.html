@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Baby Tracker" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="icon-180.png" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles-v8.css?v=8" />
   <title>Baby Tracker</title>
 </head>
 <body>
@@ -204,6 +204,17 @@
   </dialog>
 
   <div id="toast" class="toast"></div>
-  <script src="app.js"></script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister()));
+    }
+    if ("caches" in window) {
+      caches.keys().then(keys => keys.forEach(k => {
+        if (k.startsWith("baby-tracker")) caches.delete(k);
+      }));
+    }
+  </script>
+  <script src="app-v8.js?v=8"></script>
 </body>
 </html>
