@@ -19,7 +19,7 @@ function localInput(t){const d=new Date(t),p=n=>String(n).padStart(2,"0");return
 function fmtTime(t){return new Intl.DateTimeFormat("en-US",{hour:"numeric",minute:"2-digit"}).format(new Date(t));}
 function fmtDay(k){const [y,m,d]=k.split("-").map(Number);return new Intl.DateTimeFormat("en-US",{weekday:"short",month:"short",day:"numeric"}).format(new Date(y,m-1,d));}
 function elapsed(t){const m=Math.max(0,Math.floor((Date.now()-new Date(t))/60000));return m<60?`${m} min`:`${Math.floor(m/60)} hr ${m%60} min`;}
-function title(e){if(e.type==="pee")return"💧 Wet Diaper";if(e.type==="poop")return"💩 Dirty Diaper";if(e.type==="formula")return`🍼 Formula ${e.amount} ml`;if(e.type==="pump")return`🥛 Pump Milk ${e.amount} ml`;return"🤱 Breast Feed";}
+function title(e){if(e.type==="pee")return"💧 Wet Diaper";if(e.type==="poop")return"💩 Dirty Diaper";if(e.type==="formula")return`🍼 Formula ${e.amount} ml`;if(e.type==="pump")return`🥛 Pumped Milk ${e.amount} ml`;return"🤱 Breast Feed";}
 function meta(e){return e.type==="breast"?`${e.durationMin} min · ${fmtTime(e.createdAt)}–${fmtTime(endOf(e))}`:"Logged";}
 function toast(m){const x=$("toast");x.textContent=m;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1600);}
 function add(e){entries.push({id:id(),...e});entries.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));save();render();toast("Record saved.");}
@@ -57,7 +57,7 @@ function openBreast(){
 }
 function openPump(){
   $("pumpAmountInput").value="";
-  fillGrid("pumpAmountGrid","pumpAmountInput",[30,45,60,90,120,150],"ml");
+  fillGrid("pumpAmountGrid","pumpAmountInput",[10,20,30,40,50,60],"ml");
   dialogs.pump.showModal();
 }
 
@@ -80,7 +80,7 @@ function renderDaily(){
     c.innerHTML=`<div class="daily-date">${fmtDay(k)}</div><div class="daily-grid">
     <div><strong>${s.wet}</strong><span>Wet</span></div><div><strong>${s.dirty}</strong><span>Dirty</span></div>
     <div><strong>${s.formula} ml</strong><span>Formula</span></div><div><strong>${s.breast} min</strong><span>Breast</span></div>
-    <div><strong>${s.pump} ml</strong><span>Pumped</span></div><div><strong>${s.feeds}</strong><span>Feeds</span></div></div>`;
+    <div><strong>${s.pump} ml</strong><span>Pumped Milk Fed</span></div><div><strong>${s.feeds}</strong><span>Feeds</span></div></div>`;
     wrap.appendChild(c);
   });
 }

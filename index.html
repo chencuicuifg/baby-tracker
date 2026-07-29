@@ -47,7 +47,7 @@
         <span class="emoji">🍼</span><span>Formula</span><small>Select amount</small>
       </button>
       <button class="quick-btn pump wide" data-action="pump">
-        <span class="emoji">🥛</span><span>Pump Milk</span><small>Select amount</small>
+        <span class="emoji">🥛</span><span>Pumped Milk</span><small>Amount given to baby</small>
       </button>
     </section>
 
@@ -56,7 +56,7 @@
       <div><strong id="poopCount">0</strong><span>Dirty / 24h</span></div>
       <div><strong id="formulaTotal">0 ml</strong><span>Formula / 24h</span></div>
       <div><strong id="breastTotal">0 min</strong><span>Breast / 24h</span></div>
-      <div><strong id="pumpTotal">0 ml</strong><span>Pumped / 24h</span></div>
+      <div><strong id="pumpTotal">0 ml</strong><span>Pumped Milk Fed / 24h</span></div>
     </section>
 
     <section class="daily-stats">
@@ -123,7 +123,7 @@
 
   <dialog id="pumpDialog">
     <form method="dialog" class="dialog-card">
-      <h3>How much milk did you pump?</h3>
+      <h3>How much pumped milk did the baby drink?</h3>
       <div class="amount-grid" id="pumpAmountGrid"></div>
       <label>Other amount
         <div class="duration-row">
@@ -147,7 +147,7 @@
           <option value="poop">💩 Dirty Diaper</option>
           <option value="breast">🤱 Breast Feed</option>
           <option value="formula">🍼 Formula</option>
-          <option value="pump">🥛 Pump Milk</option>
+          <option value="pump">🥛 Pumped Milk Fed</option>
         </select>
       </label>
       <div id="historyDynamicFields"></div>
