@@ -24,12 +24,12 @@
 
     <section class="status-card">
       <div>
-        <span class="status-label">Time since last feeding started</span>
+        <span class="status-label">Time since last feeding ended</span>
         <strong id="sinceFeed">No feeding logged</strong>
       </div>
       <div class="timer-box">
-        <span>Breastfeeding uses end time</span>
-        <strong>Start time is calculated</strong>
+        <span>Breastfeeding is logged at its end time</span>
+        <strong>Formula and pumped milk also count</strong>
       </div>
     </section>
 
@@ -59,11 +59,6 @@
       <div><strong id="pumpTotal">0 ml</strong><span>Pumped Milk Fed / 24h</span></div>
     </section>
 
-    <section class="daily-stats">
-      <div class="section-heading"><h2>Calendar Day Statistics</h2></div>
-      <div id="dailyStatsList" class="daily-stats-list"></div>
-    </section>
-
     <section class="history">
       <div class="section-heading">
         <h2>Recent Records <small class="edit-hint">tap a record to edit</small></h2>
@@ -74,6 +69,11 @@
       </div>
       <div id="emptyState" class="empty">No records yet.</div>
       <ul id="historyList"></ul>
+    </section>
+
+    <section class="daily-stats">
+      <div class="section-heading"><h2>Calendar Day Statistics</h2></div>
+      <div id="dailyStatsList" class="daily-stats-list"></div>
     </section>
 
     <footer class="footer-actions">
@@ -215,6 +215,6 @@
       }));
     }
   </script>
-  <script src="app-v8.js?v=8"></script>
+  <script src="app-v12.js?v=12"></script>
 </body>
 </html>
